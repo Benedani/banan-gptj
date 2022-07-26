@@ -29,18 +29,16 @@ def inference(model_inputs:dict) -> dict:
     global tokenizer
 
     # Parse out your arguments
-    prompt = model_inputs.get('prompt', None)
-    length = int(model_inputs.get('length', None))
-    temperature = float(model_inputs.get('temperature', None))
-    topP = float(model_inputs.get('topP', None))
-    if prompt == None:
-        return {'message': "No prompt provided"}
+    prompt = model_inputs.get('prompt', "")
+    length = model_inputs.get('length', 50)
+    temperature = model_inputs.get('temperature', 0.9)
+    top_p = model_inputs.get('topP', 0.9)
     
     # Tokenize inputs
     input_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)
 
     # Run the model
-    output = model.generate(input_tokens, temperature=0.9, max_new_tokens=length, top_p: topP, repetition_penalty: 1.9, diversity_penalty: 1.9)
+    output = model.generate(input_tokens, temperature=temperature, max_new_tokens=length, top_p=top_p, repetition_penalty=1.9, diversity_penalty=1.9)
 
     # Decode output tokens
     output_text = tokenizer.batch_decode(output, skip_special_tokens = True)[0]

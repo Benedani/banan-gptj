@@ -1,4 +1,4 @@
-from transformers import GPTJForCausalLM, GPT2Tokenizer
+from transformers import GPTJForCausalLM, GPT2Tokenizer, LogitsProcessorList, BeamSearchScorer, TopPLogitsWarper, RepetitionPenaltyLogitsProcessor, TemperatureLogitsWarper, HammingDiversityLogitsProcessor
 import torch
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"

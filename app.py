@@ -34,12 +34,13 @@ def inference(model_inputs:dict) -> dict:
         length = model_inputs.get('length', 50)
         temperature = model_inputs.get('temperature', 0.9)
         top_p = model_inputs.get('topP', 0.9)
+        repetition_penalty = model_inputs.get('repetitionPenalty', 1.0)
 
         # Tokenize inputs
         input_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)
 
         # Run the model
-        output = model.generate(input_tokens, do_sample=True, temperature=temperature, max_new_tokens=length, top_p=top_p, repetition_penalty=1.9, diversity_penalty=1.9)
+        output = model.generate(input_tokens, temperature=temperature, max_new_tokens=length, top_p=top_p, repetition_penalty=repetition_penalty)
 
         # Decode output tokens
         output_text = tokenizer.batch_decode(output, skip_special_tokens = True)[0]
@@ -49,4 +50,4 @@ def inference(model_inputs:dict) -> dict:
         # Return the results as a dictionary
         return result
     except BaseException as skill_issue:
-        return {"skill_issue": skill_issue}
+        return {"skill_issue": str(skill_issue)}

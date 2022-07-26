@@ -35,13 +35,30 @@ def inference(model_inputs:dict) -> dict:
         temperature = model_inputs.get('temperature', 0.9)
         top_p = model_inputs.get('topP', 0.9)
         repetition_penalty = model_inputs.get('repetitionPenalty', 1.0)
+        diversity_penalty = model_inputs.get('diversityPenalty', 1.0)
 
         # Tokenize inputs
         input_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)
 
-        # Run the model
-        output = model.generate(input_tokens, temperature=temperature, max_new_tokens=length, top_p=top_p, repetition_penalty=repetition_penalty)
+        beam_scorer = BeamSearchScorer(
+            batch_size=1,
+            num_beams=20,
+            device=device,
+            num_beam_groups=5,
+        )
 
+        # instantiate logits processors
+        logits_processor = LogitsProcessorList(
+        [
+            TopPLogitsWarper(top_p=top_p),
+            RepetitionPenaltyLogitsProcessor(penalty=repetition_penalty),
+            TemperatureLogitsWarper(temperature=temperature),
+            HammingDiversityLogitsProcessor(diversity_penalty=diversity_penalty,num_beams=20,num_beam_groups=5)
+        ]
+        )
+
+        # Run the model
+        output = model.group_beam_search(input_tokens,beam_scorer,logits_processor,stopping_criteria=StoppingCriteriaList([MaxLengthCriteria(max_length=length)]))
         # Decode output tokens
         output_text = tokenizer.batch_decode(output, skip_special_tokens = True)[0]
 

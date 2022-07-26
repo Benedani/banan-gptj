@@ -39,7 +39,7 @@ def inference(model_inputs:dict) -> dict:
         input_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)
 
         # Run the model
-        output = model.generate(input_tokens, temperature=temperature, max_new_tokens=length, top_p=top_p, repetition_penalty=1.9, diversity_penalty=1.9)
+        output = model.generate(input_tokens, do_sample=True, temperature=temperature, max_new_tokens=length, top_p=top_p, repetition_penalty=1.9, diversity_penalty=1.9)
 
         # Decode output tokens
         output_text = tokenizer.batch_decode(output, skip_special_tokens = True)[0]
@@ -48,5 +48,5 @@ def inference(model_inputs:dict) -> dict:
 
         # Return the results as a dictionary
         return result
-    except Exception as skill_issue:
+    except BaseException as skill_issue:
         return {"skill_issue": skill_issue}

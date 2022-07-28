@@ -35,6 +35,9 @@ def inference(model_inputs:dict) -> dict:
         temperature = model_inputs.get('temperature', 0.9)
         top_p = model_inputs.get('topP', 0.9)
         repetition_penalty = model_inputs.get('repetitionPenalty', 1.0)
+        
+        if prompt == "KEEPALIVE" && length == 1:
+            return {"output": "keeping alive"}
 
         # Tokenize inputs
         input_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)

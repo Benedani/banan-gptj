@@ -43,7 +43,7 @@ def inference(model_inputs:dict) -> dict:
         input_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)
         
         bad_words_ids = [
-            tokenizer.encode(bad_word, add_prefix_space=True) for bad_word in ["??", "???", "????", "anal", "arse", "ass", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
+            tokenizer.encode(bad_word, add_prefix_space=True) for bad_word in ["??", "???", "????", "?????", "??????", "???????", "????????", "anal", "arse", "ass", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
         ]
 
         # Run the model

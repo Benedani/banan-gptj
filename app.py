@@ -18,8 +18,12 @@ def init():
         print("loading to GPU...")
         model.cuda()
         print("done")
-
+    
     tokenizer = GPTNeoXTokenizerFast.from_pretrained("EleutherAI/gpt-neox-20b")
+    
+    # we only do inference here
+    model.eval()
+    torch.no_grad()
 
 
 # Inference is ran for every server call

@@ -40,7 +40,7 @@ def inference(model_inputs:dict) -> dict:
         top_p = model_inputs.get('topP', 0.9)
         repetition_penalty = model_inputs.get('repetitionPenalty', 1.0)
         
-        if prompt == "KEEPALIVE" && length == 1:
+        if prompt == "KEEPALIVE" and length == 1:
             return {"output": "keeping alive"}
 
         # Tokenize inputs

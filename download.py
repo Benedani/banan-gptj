@@ -10,7 +10,7 @@ def download_model():
     # do a dry run of loading the huggingface model, which will download weights
     print("downloading model...")
     GPTNeoXForCausalLM.from_pretrained(
-        "EleutherAI/gpt-neox-20b", revision="float16", torch_dtype=torch.float16, low_cpu_mem_usage=True
+        "EleutherAI/gpt-neox-20b", low_cpu_mem_usage=True
     )
     print("done")
 

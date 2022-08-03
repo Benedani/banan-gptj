@@ -6,6 +6,7 @@
 from transformers import GPTNeoXForCausalLM, GPTNeoXTokenizerFast
 import torch
 
+
 def download_model():
     # do a dry run of loading the huggingface model, which will download weights
     print("downloading model...")

@@ -3,20 +3,20 @@
 
 # In this example: A Huggingface GPT NeoX model
 
-from transformers import GPTNeoXForCausalLM, GPTNeoXTokenizerFast
+from transformers import GPTJForCausalLM, AutoTokenizer
 import torch
 
 
 def download_model():
     # do a dry run of loading the huggingface model, which will download weights
     print("downloading model...")
-    GPTNeoXForCausalLM.from_pretrained(
-        "EleutherAI/gpt-neox-20b", torch_dtype="auto"
+    GPTJForCausalLM.from_pretrained(
+        "EleutherAI/gpt-j-6B", revision="float16", torch_dtype=torch.float16, low_cpu_mem_usage=True
     ).half()
     print("done")
 
     print("downloading tokenizer...")
-    GPTNeoXTokenizerFast.from_pretrained("EleutherAI/gpt-neox-20b")
+    AutoTokenizer.from_pretrained("EleutherAI/gpt-j-6B")
     print("done")
 
 if __name__ == "__main__":

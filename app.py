@@ -64,7 +64,7 @@ def inference(model_inputs:dict) -> dict:
 
             # Should we exit?
             ln = output_text.splitlines()[-1]
-            if len(ln) >= len(line_start) and not ln.starts_with(line_start):
+            if len(ln) >= len(line_start) and not ln.startswith(line_start):
                 # ok it's generating something unrelated now
                 break
 

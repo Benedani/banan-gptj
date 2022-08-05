@@ -60,7 +60,7 @@ def inference(model_inputs:dict) -> dict:
             current_tokens = model.generate(current_tokens, use_cache=True, do_sample=True, temperature=temperature, max_new_tokens=tokens_per_step, top_p=top_p, repetition_penalty=repetition_penalty)
 
             # Decode output tokens
-            output_text = tokenizer.batch_decode(output, skip_special_tokens = True)[0]
+            output_text = tokenizer.batch_decode(current_tokens, skip_special_tokens = True)[0]
 
             # Should we exit?
             ln = output_text.splitlines()[-1]

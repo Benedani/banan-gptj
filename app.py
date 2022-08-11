@@ -3,15 +3,12 @@ import torch
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-bad_words_ids = [
-    tokenizer.encode(bad_word, add_prefix_space=True) for bad_word in ["ikr", "kr", "??", "???", "????", "?????", "??????", "???????", "????????", "anal", "arse", "ass", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
-]
-
 # Init is ran on server startup
 # Load your model to GPU as a global variable here.
 def init():
     global model
     global tokenizer
+    global bad_words_ids
 
     print("loading to CPU...")
     model = GPTJForCausalLM.from_pretrained("EleutherAI/gpt-j-6B", revision="float16", torch_dtype=torch.float16, low_cpu_mem_usage=True).half()
@@ -24,6 +21,11 @@ def init():
         print("done")
 
     tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-j-6B")
+    
+    bad_words_ids = [
+        tokenizer.encode(bad_word) for bad_word in ["ikr", "kr", "??", "???", "????", "?????", "??????", "???????", "????????", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
+    ]
+
 
     # we only do inference here
     torch.no_grad()

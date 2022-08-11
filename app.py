@@ -48,16 +48,16 @@ def inference(model_inputs:dict) -> dict:
         if prompt == "KEEPALIVE" and length == 1:
             return {"output": "keeping alive"}
 
-        #bad_words_ids = [
-        #    tokenizer.encode(bad_word, add_prefix_space=True) for bad_word in ["??", "???", "????", "?????", "??????", "???????", "????????", "anal", "arse", "ass", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
-        #]
+        bad_words_ids = [
+            tokenizer.encode(bad_word, add_prefix_space=True) for bad_word in ["ikr", "kr", "??", "???", "????", "?????", "??????", "???????", "????????", "anal", "arse", "ass", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
+        ]
 
         # Run the model
         current_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)
         output_text = prompt
 
         for _i in range(steps):
-            current_tokens = model.generate(current_tokens, use_cache=True, do_sample=True, temperature=temperature, max_new_tokens=tokens_per_step, top_p=top_p, repetition_penalty=repetition_penalty)
+            current_tokens = model.generate(current_tokens, use_cache=True, do_sample=True, temperature=temperature, max_new_tokens=tokens_per_step, top_p=top_p, repetition_penalty=repetition_penalty, bad_words_ids: bad_words_ids)
 
             # Decode output tokens
             output_text = tokenizer.batch_decode(current_tokens, skip_special_tokens = True)[0]

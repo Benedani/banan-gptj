@@ -57,7 +57,7 @@ def inference(model_inputs:dict) -> dict:
         output_text = prompt
 
         for _i in range(steps):
-            current_tokens = model.generate(current_tokens, use_cache=True, do_sample=True, temperature=temperature, max_new_tokens=tokens_per_step, top_p=top_p, repetition_penalty=repetition_penalty, bad_words_ids: bad_words_ids)
+            current_tokens = model.generate(current_tokens, use_cache=True, do_sample=True, temperature=temperature, max_new_tokens=tokens_per_step, top_p=top_p, repetition_penalty=repetition_penalty, bad_words_ids=bad_words_ids)
 
             # Decode output tokens
             output_text = tokenizer.batch_decode(current_tokens, skip_special_tokens = True)[0]

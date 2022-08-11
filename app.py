@@ -3,6 +3,10 @@ import torch
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
+bad_words_ids = [
+    tokenizer.encode(bad_word, add_prefix_space=True) for bad_word in ["ikr", "kr", "??", "???", "????", "?????", "??????", "???????", "????????", "anal", "arse", "ass", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
+]
+
 # Init is ran on server startup
 # Load your model to GPU as a global variable here.
 def init():
@@ -45,12 +49,8 @@ def inference(model_inputs:dict) -> dict:
         steps = model_inputs.get('steps', 5)
         line_start = model_inputs.get('lineStart', "Phineas ")
 
-        if prompt == "KEEPALIVE" and length == 1:
+        if prompt == "KEEPALIVE" and tokens_per_step == 1:
             return {"output": "keeping alive"}
-
-        bad_words_ids = [
-            tokenizer.encode(bad_word, add_prefix_space=True) for bad_word in ["ikr", "kr", "??", "???", "????", "?????", "??????", "???????", "????????", "anal", "arse", "ass", "bitch", "boner", "dick", "dildo", "nigga", "nigge", "penis", "pussy", "vagina"]
-        ]
 
         # Run the model
         current_tokens = tokenizer.encode(prompt, return_tensors="pt").to(device)

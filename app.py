@@ -1,6 +1,5 @@
 from transformers import GPTJForCausalLM, AutoTokenizer
 import torch
-import time
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -11,30 +10,21 @@ def init():
     global tokenizer
     global bad_words_ids
 
-    t_start = time.time()
-
-    print("loading to CPU... ", int((time.time() - t_start) * 1000), " ms")
     model = GPTJForCausalLM.from_pretrained("EleutherAI/gpt-j-6B", revision="float16", torch_dtype=torch.float16, low_cpu_mem_usage=True).half()
-    print("done ", int((time.time() - t_start) * 1000), " ms")
 
     # conditionally load to GPU
     if device == "cuda:0":
-        print("loading to GPU... ", int((time.time() - t_start) * 1000), " ms")
         model.cuda()
-        print("done ", int((time.time() - t_start) * 1000), " ms")
 
     tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-j-6B")
-    print("loaded tokenizer ", int((time.time() - t_start) * 1000), " ms")
     
     bad_words_ids = [
         tokenizer.encode(bad_word) for bad_word in ["ik", "ikr", "kr", "??", "???", "????", "?????", "??????", "???????", "????????", "bitch", "boner", "dick", "dildo", "faggot", "nigga", "nigge", "penis", "pussy", "vagina"]
     ]
-    print("loaded badword ", int((time.time() - t_start) * 1000), " ms")
 
 
     # we only do inference here
     torch.no_grad()
-    print("no_grad applied ", int((time.time() - t_start) * 1000), " ms")
 
 
 # Inference is ran for every server call

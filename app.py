@@ -1,14 +1,14 @@
 from transformers import GPTJForCausalLM, AutoTokenizer
 import torch
 
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
+
 # Init is ran on server startup
 # Load your model to GPU as a global variable here.
 def init():
     global model
     global tokenizer
     global bad_words_ids
-
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
     model = GPTJForCausalLM.from_pretrained("EleutherAI/gpt-j-6B", revision="float16", torch_dtype=torch.float16, low_cpu_mem_usage=True).half()
     

@@ -8,7 +8,6 @@ def init():
     global tokenizer
     global bad_words_ids
 
-    torch.multiprocessing.set_start_method('spawn')
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
     model = GPTJForCausalLM.from_pretrained("EleutherAI/gpt-j-6B", revision="float16", torch_dtype=torch.float16, low_cpu_mem_usage=True).half()
